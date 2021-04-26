@@ -33,7 +33,7 @@ export default function useAuth(code) {
                 setAccessToken(response.data.access_token);
                 setExpiresIn(response.data.expires_in);
             })
-            .catch( () => {
+            .catch( (err) => {
                 console.log(err);
                 window.location = '/';
             });
