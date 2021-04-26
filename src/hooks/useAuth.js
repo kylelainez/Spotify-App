@@ -6,7 +6,36 @@ export default function useAuth(code) {
     const [refreshToken, setRefreshToken] = useState();
     const [expiresIn, setExpiresIn] = useState();
 
-    axios.post('/api/spotify/login', {
-        code
-    });
+    useEffect(() => {
+        axios
+            .post('/api/spotify/login', {
+            code
+            })
+            .then(response => {
+                setAccessToken(response.data.access_token);
+                setRefreshToken(response.data.refresh_token);
+                setExpiresIn(response.data.expires_in);
+            })
+            .catch( () => window.location = '/');
+    }, [code]);
+
+    useEffect(() => {
+        if (!refreshToken || !expiresIn) return;
+        const interval = setInterval(()=> {
+            axios
+            .post('/api/spotify/refresh', {
+                refreshToken
+            })
+            .then(response => {
+                setAccessToken(response.data.access_token);
+                setExpiresIn(response.data.expires_in);
+            })
+            .catch( () => window.location = '/');
+        }, (expiresIn -60) * 1000);
+        
+        return () => clearInterval(interval);
+    }, [refreshToken, expiresIn]);
+   
+    
+    return accessToken;
 }
