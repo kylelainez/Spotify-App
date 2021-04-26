@@ -18,7 +18,7 @@ export default function useAuth(code) {
             })
             .catch( (err) => {
                 console.log(err);
-                window.location = '/';
+                // window.location = '/';
             });
     }, [code]);
 
@@ -35,7 +35,7 @@ export default function useAuth(code) {
             })
             .catch( (err) => {
                 console.log(err);
-                window.location = '/';
+                // window.location = '/';
             });
         }, (expiresIn -60) * 1000);
         
